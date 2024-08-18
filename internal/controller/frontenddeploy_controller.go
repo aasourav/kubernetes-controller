@@ -67,7 +67,7 @@ func (r *FrontendDeployReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
-	frontendSvc, err := r.reconcileFrontendService(ctx, &controllerapi.FrontendDeploy{}, l)
+	frontendSvc, err := r.reconcileFrontendService(ctx, frontendDeploy, l)
 
 	if err != nil {
 		if err.Error() != utils.FOUND {
