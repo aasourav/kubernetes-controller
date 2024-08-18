@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- frontends_v1_frontenddeploy.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

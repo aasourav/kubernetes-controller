@@ -1,0 +1,27 @@
+# permissions for end users to edit frontenddeploys.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: sand-ops
+    app.kubernetes.io/managed-by: kustomize
+  name: frontenddeploy-editor-role
+rules:
+- apiGroups:
+  - frontends.sandtech.io
+  resources:
+  - frontenddeploys
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - frontends.sandtech.io
+  resources:
+  - frontenddeploys/status
+  verbs:
+  - get

@@ -1,0 +1,25 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "chart.fullname" . }}-frontenddeploy-editor-role
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - frontends.sandtech.io
+  resources:
+  - frontenddeploys
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - frontends.sandtech.io
+  resources:
+  - frontenddeploys/status
+  verbs:
+  - get

@@ -1,0 +1,23 @@
+# permissions for end users to view frontenddeploys.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: sand-ops
+    app.kubernetes.io/managed-by: kustomize
+  name: frontenddeploy-viewer-role
+rules:
+- apiGroups:
+  - frontends.sandtech.io
+  resources:
+  - frontenddeploys
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - frontends.sandtech.io
+  resources:
+  - frontenddeploys/status
+  verbs:
+  - get
