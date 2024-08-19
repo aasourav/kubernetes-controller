@@ -21,11 +21,14 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller"
 
 	controllerapi "sandtech.io/sand-ops/api/v1"
 	"sandtech.io/sand-ops/internal/utils"
@@ -67,7 +70,7 @@ func (r *FrontendDeployReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
-	frontendSvc, err := r.reconcileFrontendService(ctx, &controllerapi.FrontendDeploy{}, l)
+	frontendSvc, err := r.reconcileFrontendService(ctx, frontendDeploy, l)
 
 	if err != nil {
 		if err.Error() != utils.FOUND {
@@ -81,9 +84,11 @@ func (r *FrontendDeployReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	frontendPod, err := r.reconcileFrontend(ctx, frontendDeploy, l)
 
 	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, fmt.Sprintf("failed to create frontend deployment: %s/%s", frontendPod.Name, frontendPod.Namespace))
+		if err.Error() == utils.FOUND {
 			return ctrl.Result{}, nil
+		} else {
+			l.Error(err, fmt.Sprintf("failed to create frontend deployment: %s/%s", frontendPod.Name, frontendPod.Namespace))
+			return ctrl.Result{}, err
 		}
 	} else {
 		l.Info(fmt.Sprintf("successfully created frontend deployment: %s/%s", frontendPod.Name, frontendPod.Namespace))
@@ -95,6 +100,9 @@ func (r *FrontendDeployReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 // SetupWithManager sets up the controller with the Manager.
 func (r *FrontendDeployReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
+		WithOptions(controller.Options{MaxConcurrentReconciles: 2}).
 		For(&controllerapi.FrontendDeploy{}).
+		Owns(&corev1.Service{}).
+		Owns(&appsv1.Deployment{}).
 		Complete(r)
 }
