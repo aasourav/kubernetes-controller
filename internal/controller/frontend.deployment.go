@@ -19,7 +19,7 @@ func (r FrontendDeployReconciler) reconcileFrontend(ctx context.Context, fronten
 	l.Info("reconcilling frontend deployment")
 
 	frontendDeployment := &appsv1.Deployment{}
-	err := r.Get(ctx, types.NamespacedName{Name: frontendDeployment.Name, Namespace: frontendDeployment.Namespace}, frontendDeployment)
+	err := r.Get(ctx, types.NamespacedName{Name: frontendPod.Name, Namespace: frontendPod.Namespace}, frontendDeployment)
 
 	if err == nil {
 		return *frontendDeployment, fmt.Errorf(utils.FOUND)

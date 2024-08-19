@@ -84,9 +84,9 @@ func (r *FrontendDeployReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	frontendPod, err := r.reconcileFrontend(ctx, frontendDeploy, l)
 
 	if err != nil {
-		if err.Error() == utils.FOUND{
+		if err.Error() == utils.FOUND {
 			return ctrl.Result{}, nil
-		}else {
+		} else {
 			l.Error(err, fmt.Sprintf("failed to create frontend deployment: %s/%s", frontendPod.Name, frontendPod.Namespace))
 			return ctrl.Result{}, err
 		}
