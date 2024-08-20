@@ -3,6 +3,7 @@ module sandtech.io/sand-ops
 go 1.22.0
 
 replace sandtech.io/sand-ops/internal/utils => ./internal/utils
+
 require (
 	github.com/go-logr/logr v1.4.1
 	github.com/onsi/ginkgo/v2 v2.17.1
@@ -13,7 +14,6 @@ require (
 	k8s.io/client-go v0.30.1
 	sigs.k8s.io/controller-runtime v0.18.4
 )
-
 
 require (
 	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20230305170008-8188dc5388df // indirect

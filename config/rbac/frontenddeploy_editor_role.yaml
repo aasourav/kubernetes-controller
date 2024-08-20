@@ -7,21 +7,21 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: frontenddeploy-editor-role
 rules:
-- apiGroups:
-  - frontends.sandtech.io
-  resources:
-  - frontenddeploys
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - frontends.sandtech.io
-  resources:
-  - frontenddeploys/status
-  verbs:
-  - get
+  - apiGroups:
+      - aasdev.sandtech.io
+    resources:
+      - frontenddeploys
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - aasdev.sandtech.io
+    resources:
+      - frontenddeploys/status
+    verbs:
+      - get

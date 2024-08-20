@@ -6,7 +6,7 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-  - frontends.sandtech.io
+  - aasdev.sandtech.io
   resources:
   - frontenddeploys
   verbs:
@@ -18,13 +18,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - frontends.sandtech.io
+  - aasdev.sandtech.io
   resources:
   - frontenddeploys/finalizers
   verbs:
   - update
 - apiGroups:
-  - frontends.sandtech.io
+  - aasdev.sandtech.io
   resources:
   - frontenddeploys/status
   verbs:

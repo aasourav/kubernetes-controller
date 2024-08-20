@@ -42,9 +42,9 @@ type FrontendDeployReconciler struct {
 	KubeClients
 }
 
-// +kubebuilder:rbac:groups=frontends.sandtech.io,resources=frontenddeploys,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=frontends.sandtech.io,resources=frontenddeploys/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=frontends.sandtech.io,resources=frontenddeploys/finalizers,verbs=update
+// +kubebuilder:rbac:groups=aasdev.sandtech.io,resources=frontenddeploys,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=aasdev.sandtech.io,resources=frontenddeploys/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=aasdev.sandtech.io,resources=frontenddeploys/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.

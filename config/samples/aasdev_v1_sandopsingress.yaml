@@ -1,12 +1,9 @@
 apiVersion: aasdev.sandtech.io/v1
-kind: FrontendDeploy
+kind: SandOpsIngress
 metadata:
   labels:
     app.kubernetes.io/name: sand-ops
     app.kubernetes.io/managed-by: kustomize
-  name: frontenddeploy-sample
-  namespace: default
+  name: sandopsingress-sample
 spec:
-  imageName: nginx
-  port: 80
   # TODO(user): Add fields here
