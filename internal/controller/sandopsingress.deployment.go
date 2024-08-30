@@ -23,7 +23,7 @@ import (
 func (r *SandOpsIngressReconciler) reconcileServiceAccountAdmission(ctx context.Context, ingressDeployment *controllerapi.SandOpsIngress, l logr.Logger) (corev1.ServiceAccount, error) {
 	l.Info("reconcilling ingress service account")
 	serviceAccount := &corev1.ServiceAccount{}
-	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, serviceAccount)
+	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, serviceAccount)
 	if err == nil {
 		return *serviceAccount, fmt.Errorf(utils.FOUND)
 	}
@@ -34,8 +34,8 @@ func (r *SandOpsIngressReconciler) reconcileServiceAccountAdmission(ctx context.
 
 	serviceAccount = &corev1.ServiceAccount{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      utils.INGRESS_NGINX,
-			Namespace: utils.NSSuffixedNamespace(ingressDeployment.Namespace),
+			Name:      utils.INGRESS_NGINX_ADMISSION,
+			Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name),
 			Labels:    utils.IngressLabel(utils.ADMISSION_WEBHOOK),
 			OwnerReferences: []metav1.OwnerReference{
 				{
@@ -250,7 +250,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressAdmissionRoleBinding(ctx cont
 	l.Info("reconciling ingress admission role binding")
 
 	roleBinding := &rbacv1.RoleBinding{}
-	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, roleBinding)
+	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, roleBinding)
 	if err == nil {
 		return *roleBinding, fmt.Errorf(utils.FOUND)
 	}
@@ -294,7 +294,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressAdmissionRole(ctx context.Con
 	l.Info("reoncilling ingress role")
 
 	ingressAdmissionRole := &rbacv1.Role{}
-	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressAdmissionRole)
+	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressAdmissionRole)
 	if err == nil {
 		return *ingressAdmissionRole, fmt.Errorf(utils.FOUND)
 	}
@@ -304,7 +304,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressAdmissionRole(ctx context.Con
 
 	ingressAdmissionRole = &rbacv1.Role{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      utils.INGRESS_NGINX,
+			Name:      utils.INGRESS_NGINX_ADMISSION,
 			Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name),
 			Labels:    utils.IngressLabel(utils.CONTROLLER),
 			OwnerReferences: []metav1.OwnerReference{
@@ -419,7 +419,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressClusterRoleBinding(ctx contex
 	l.Info("reconciling ingress admission role binding")
 
 	clusterRoleBinding := &rbacv1.ClusterRoleBinding{}
-	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRoleBinding)
+	err := r.Get(ctx, types.NamespacedName{Name: "ingress-nginx-" + utils.NSSuffixedNamespace(ingressDeployment.Name), Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRoleBinding)
 	if err == nil {
 		return *clusterRoleBinding, fmt.Errorf(utils.FOUND)
 	}
@@ -429,7 +429,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressClusterRoleBinding(ctx contex
 
 	clusterRoleBinding = &rbacv1.ClusterRoleBinding{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      utils.INGRESS_NGINX,
+			Name:      "ingress-nginx-" + utils.NSSuffixedNamespace(ingressDeployment.Name),
 			Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name),
 			Labels:    utils.IngressLabel(utils.CONTROLLER),
 			OwnerReferences: []metav1.OwnerReference{
@@ -495,7 +495,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressAdmissionClusterRoleBinding(c
 	l.Info("reconciling ingress admission role binding")
 
 	clusterRoleBinding := &rbacv1.ClusterRoleBinding{}
-	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRoleBinding)
+	err := r.Get(ctx, types.NamespacedName{Name: "ingress-nginx-admission-" + utils.NSSuffixedNamespace(ingressDeployment.Name), Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRoleBinding)
 	if err == nil {
 		return *clusterRoleBinding, fmt.Errorf(utils.FOUND)
 	}
@@ -505,7 +505,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressAdmissionClusterRoleBinding(c
 
 	clusterRoleBinding = &rbacv1.ClusterRoleBinding{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      utils.INGRESS_NGINX_ADMISSION,
+			Name:      "ingress-nginx-admission-" + utils.NSSuffixedNamespace(ingressDeployment.Name),
 			Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name),
 			Labels:    utils.IngressLabel(utils.ADMISSION_WEBHOOK),
 			OwnerReferences: []metav1.OwnerReference{
