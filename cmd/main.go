@@ -176,8 +176,10 @@ func main() {
 		os.Exit(1)
 	}
 	if err = (&controller.SandOpsIngressReconciler{
-		Client: mgr.GetClient(),
-		Scheme: mgr.GetScheme(),
+		Client:      mgr.GetClient(),
+		Scheme:      mgr.GetScheme(),
+		Log:         mgr.GetLogger().WithName("ingress deployment: "),
+		KubeClients: KubeClientSet,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "SandOpsIngress")
 		os.Exit(1)

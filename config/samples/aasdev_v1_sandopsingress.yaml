@@ -4,6 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: sand-ops
     app.kubernetes.io/managed-by: kustomize
-  name: sandopsingress-sample
+  name: test
+  namespace: test-ns
 spec:
   # TODO(user): Add fields here

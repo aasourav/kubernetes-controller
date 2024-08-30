@@ -3,7 +3,7 @@
 # It should be run by config/default
 resources:
   - bases/aasdev.sandtech.io_frontenddeploys.yaml
-- bases/aasdev.sandtech.io_sandopsingresses.yaml
+  - bases/aasdev.sandtech.io_sandopsingresses.yaml
 # +kubebuilder:scaffold:crdkustomizeresource
 
 patches:
