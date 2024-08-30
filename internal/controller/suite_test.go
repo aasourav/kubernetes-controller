@@ -33,7 +33,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	aasdevv1 "sandtech.io/sand-ops/api/v1"
-	frontendsv1 "sandtech.io/sand-ops/api/v1"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -72,9 +71,6 @@ var _ = BeforeSuite(func() {
 	cfg, err = testEnv.Start()
 	Expect(err).NotTo(HaveOccurred())
 	Expect(cfg).NotTo(BeNil())
-
-	err = frontendsv1.AddToScheme(scheme.Scheme)
-	Expect(err).NotTo(HaveOccurred())
 
 	err = aasdevv1.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
