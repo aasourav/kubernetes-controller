@@ -13,8 +13,17 @@ resources:
     namespaced: true
   controller: true
   domain: sandtech.io
-  group: frontends
+  group: aasdev
   kind: FrontendDeploy
+  path: sandtech.io/sand-ops/api/v1
+  version: v1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: sandtech.io
+  group: aasdev
+  kind: SandOpsIngress
   path: sandtech.io/sand-ops/api/v1
   version: v1
 version: "3"

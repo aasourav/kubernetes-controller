@@ -1,6 +1,6 @@
 package utils
 
-func BoolPointer(booleanValue bool) *bool {
+func DataTypePointerRef[T bool | string | int | int32 | int64](booleanValue T) *T {
 	return &booleanValue
 }
 
@@ -24,4 +24,18 @@ func NodeSelectorLabel(nodeNames string) map[string]string {
 			"kubernetes.io/hostname": nodeNames,
 		}
 	}
+}
+
+func IngressLabel(labelType string) map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/component": labelType,
+		"app.kubernetes.io/instance":  "ingress-nginx",
+		"app.kubernetes.io/name":      "ingress-nginx",
+		"app.kubernetes.io/part-of":   "ingress-nginx",
+		"app.kubernetes.io/version":   "1.11.2",
+	}
+}
+
+func NSSuffixedNamespace(name string) string {
+	return name + "-ns"
 }

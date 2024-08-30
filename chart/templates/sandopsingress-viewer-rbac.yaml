@@ -1,25 +1,21 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "chart.fullname" . }}-frontenddeploy-editor-role
+  name: {{ include "chart.fullname" . }}-sandopsingress-viewer-role
   labels:
   {{- include "chart.labels" . | nindent 4 }}
 rules:
 - apiGroups:
   - aasdev.sandtech.io
   resources:
-  - frontenddeploys
+  - sandopsingresses
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
 - apiGroups:
   - aasdev.sandtech.io
   resources:
-  - frontenddeploys/status
+  - sandopsingresses/status
   verbs:
   - get

@@ -37,6 +37,7 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
+	aasdevv1 "sandtech.io/sand-ops/api/v1"
 	frontendsv1 "sandtech.io/sand-ops/api/v1"
 	"sandtech.io/sand-ops/internal/controller"
 	// +kubebuilder:scaffold:imports
@@ -51,6 +52,7 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(frontendsv1.AddToScheme(scheme))
+	utilruntime.Must(aasdevv1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -171,6 +173,15 @@ func main() {
 		Log:         mgr.GetLogger().WithName("frontend deployment: "),
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "FrontendDeploy")
+		os.Exit(1)
+	}
+	if err = (&controller.SandOpsIngressReconciler{
+		Client:      mgr.GetClient(),
+		Scheme:      mgr.GetScheme(),
+		Log:         mgr.GetLogger().WithName("ingress deployment: "),
+		KubeClients: KubeClientSet,
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "SandOpsIngress")
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

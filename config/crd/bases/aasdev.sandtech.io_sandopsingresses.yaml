@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-  name: frontenddeploys.frontends.sandtech.io
+  name: sandopsingresses.aasdev.sandtech.io
 spec:
-  group: frontends.sandtech.io
+  group: aasdev.sandtech.io
   names:
-    kind: FrontendDeploy
-    listKind: FrontendDeployList
-    plural: frontenddeploys
-    singular: frontenddeploy
+    kind: SandOpsIngress
+    listKind: SandOpsIngressList
+    plural: sandopsingresses
+    singular: sandopsingress
   scope: Namespaced
   versions:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: FrontendDeploy is the Schema for the frontenddeploys API
+        description: SandOpsIngress is the Schema for the sandopsingresses API
         properties:
           apiVersion:
             description: |-
@@ -37,35 +37,15 @@ spec:
           metadata:
             type: object
           spec:
+            description: SandOpsIngressSpec defines the desired state of SandOpsIngress
             properties:
-              environmentVariables:
-                items:
-                  description: FrontendDeploySpec defines the desired state of FrontendDeploy
-                  properties:
-                    name:
-                      type: string
-                    value:
-                      type: string
-                  type: object
-                type: array
-              imageName:
-                description: Foo is an example field of FrontendDeploy. Edit frontenddeploy_types.go
+              foo:
+                description: Foo is an example field of SandOpsIngress. Edit sandopsingress_types.go
                   to remove/update
                 type: string
-              nodeName:
-                type: string
-              port:
-                format: int32
-                type: integer
-              replicas:
-                format: int32
-                type: integer
-            required:
-            - imageName
-            - port
             type: object
           status:
-            description: FrontendDeployStatus defines the observed state of FrontendDeploy
+            description: SandOpsIngressStatus defines the observed state of SandOpsIngress
             type: object
         type: object
     served: true

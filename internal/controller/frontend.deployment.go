@@ -49,7 +49,7 @@ func (r FrontendDeployReconciler) reconcileFrontend(ctx context.Context, fronten
 					Kind:       frontendPod.Kind,
 					Name:       frontendPod.Name,
 					UID:        frontendPod.UID,
-					Controller: utils.BoolPointer(true),
+					Controller: utils.DataTypePointerRef(true),
 				},
 			},
 		},
