@@ -66,7 +66,7 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	ingressResource := &controllerapi.SandOpsIngress{}
 	err := r.Get(ctx, types.NamespacedName{Name: req.Name, Namespace: req.Namespace}, ingressResource)
 	if err != nil {
-		if !errors.IsNotFound(err) {
+		if errors.IsNotFound(err) {
 			return ctrl.Result{}, nil
 		}
 		l.Error(err, fmt.Sprintf("failed to get: %s/%s", req.Name, req.Namespace))

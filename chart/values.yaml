@@ -10,8 +10,8 @@ controllerManager:
         drop:
         - ALL
     image:
-      repository: controller
-      tag: latest
+      repository: aasourav/sand-ops
+      tag: 0.0.20
     resources:
       limits:
         cpu: 500m

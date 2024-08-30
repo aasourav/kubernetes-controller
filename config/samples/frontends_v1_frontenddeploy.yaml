@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/name: sand-ops
     app.kubernetes.io/managed-by: kustomize
   name: frontenddeploy-sample
-  namespace: default
+  namespace: test-ns
 spec:
   imageName: nginx
   port: 80

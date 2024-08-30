@@ -31,6 +31,32 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - aasdev.sandtech.io
+  resources:
+  - sandopsingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - aasdev.sandtech.io
+  resources:
+  - sandopsingresses/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - aasdev.sandtech.io
+  resources:
+  - sandopsingresses/status
+  verbs:
+  - get
+  - patch
+  - update
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
