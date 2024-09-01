@@ -8,4 +8,5 @@ const (
 	ADMISSION_WEBHOOK                  = "admission-webhook"
 	INGRESS_NGINX_CONTROLLER           = "ingress-nginx-controller"
 	INGRESS_NGINX_CONTROLLER_ADMISSION = "ingress-nginx-controller-admission"
+	INGRESS_FINALIZER                  = "k8s.io/ingress-finalizer"
 )

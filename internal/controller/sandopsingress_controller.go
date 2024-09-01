@@ -73,6 +73,16 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
+	isFinalizerRemoved, err := r.ingressControllerFinalizer(ctx, ingressResource, l)
+	if err != nil {
+		l.Error(err, "failed to ensure finazlier")
+		return ctrl.Result{}, err
+	}
+	if isFinalizerRemoved {
+		l.Info("aborting reconcile as finazlier has been removed")
+		return ctrl.Result{}, nil
+	}
+
 	ingressNamespaceResource, err := r.reconcileNamespace(ctx, ingressResource, l)
 	if err != nil {
 		if err.Error() != utils.FOUND {
