@@ -1,5 +1,14 @@
 package utils
 
+import (
+	"context"
+
+	networkingv1 "k8s.io/api/networking/v1"
+	"k8s.io/apimachinery/pkg/types"
+	controllerapi "sandtech.io/sand-ops/api/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+)
+
 func DataTypePointerRef[T bool | string | int | int32 | int64](booleanValue T) *T {
 	return &booleanValue
 }
@@ -38,4 +47,24 @@ func IngressLabel(labelType string) map[string]string {
 
 func NSSuffixedNamespace(name string) string {
 	return name + "-ns"
+}
+
+func GetIngress(namespace string, ctx context.Context, client client.Client) (*controllerapi.SandOpsIngress, error) {
+	ingressName := namespace[:len(namespace)-3]
+	ingress := &controllerapi.SandOpsIngress{}
+	err := client.Get(ctx, types.NamespacedName{Name: ingressName, Namespace: namespace}, ingress)
+	if err == nil {
+		return ingress, nil
+	}
+	return nil, err
+}
+
+func IngressPathExists(paths []networkingv1.HTTPIngressPath, targetPath string) (bool, *networkingv1.HTTPIngressPath, int) {
+	for i, p := range paths {
+		if p.Path == targetPath {
+
+			return true, &p, i
+		}
+	}
+	return false, nil, 0
 }

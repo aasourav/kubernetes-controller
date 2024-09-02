@@ -871,7 +871,7 @@ func (r *SandOpsIngressReconciler) reconcileJobPatchAdmissionCreate(ctx context.
 								},
 							},
 							SecurityContext: &corev1.SecurityContext{
-								AllowPrivilegeEscalation: func(b bool) *bool { return &b }(false),
+								AllowPrivilegeEscalation: utils.DataTypePointerRef(false),
 								Capabilities: &corev1.Capabilities{
 									Drop: []corev1.Capability{"ALL"},
 								},

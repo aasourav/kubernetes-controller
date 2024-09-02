@@ -94,6 +94,16 @@ func (r *FrontendDeployReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		l.Info(fmt.Sprintf("successfully created frontend deployment: %s/%s", frontendPod.Name, frontendPod.Namespace))
 	}
 
+	frontendIngress, err := r.reconcileFrontendIngress(ctx, frontendDeploy, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, fmt.Sprintf("failed to create frontend ingress: %s/%s", frontendIngress.Name, frontendIngress.Namespace))
+			return ctrl.Result{}, nil
+		} else {
+			l.Info(fmt.Sprintf("successfully created frontend ingress: %s/%s", frontendIngress.Name, frontendIngress.Namespace))
+		}
+	}
+
 	return ctrl.Result{}, nil
 }
 
