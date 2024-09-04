@@ -315,7 +315,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionRole(ctx context.Context, ingr
 
 	ingressAdmissionRole := &rbacv1.Role{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressAdmissionRole)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, ingressAdmissionRole)
 	if err != nil {
 		return err
@@ -328,7 +330,9 @@ func (r *SandOpsIngressReconciler) deleteRole(ctx context.Context, ingressDeploy
 
 	ingressRole := &rbacv1.Role{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressRole)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, ingressRole)
 	if err != nil {
 		return err
@@ -341,7 +345,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionServiceAccount(ctx context.Con
 
 	serviceAccount := &corev1.ServiceAccount{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, serviceAccount)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, serviceAccount)
 	if err != nil {
 		return err
@@ -354,7 +360,9 @@ func (r *SandOpsIngressReconciler) deleteServiceAccount(ctx context.Context, ing
 
 	serviceAccount := &corev1.ServiceAccount{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, serviceAccount)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, serviceAccount)
 	if err != nil {
 		return err
@@ -367,7 +375,9 @@ func (r *SandOpsIngressReconciler) deleteNamespace(ctx context.Context, ingressD
 
 	namespace := &corev1.Namespace{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.NSSuffixedNamespace(ingressDeployment.Name), Namespace: ingressDeployment.Namespace}, namespace)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, namespace)
 	if err != nil {
 		return err
