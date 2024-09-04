@@ -63,7 +63,6 @@ func (r FrontendDeployReconciler) reconcileFrontendIngress(ctx context.Context, 
 			return *ingress, r.Update(ctx, ingress)
 		}
 
-		fmt.Println("OHHHHOOHHHHHOOOHHHHOO::::::::::::::::::::::: ", errors.IsNotFound(ingressError))
 		if !errors.IsNotFound(ingressError) {
 			return *ingress, ingressError
 		}
