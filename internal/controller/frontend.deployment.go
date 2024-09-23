@@ -34,9 +34,11 @@ func (r FrontendDeployReconciler) reconcileFrontendIngress(ctx context.Context, 
 			}
 			deploymentSvc := "/" + frontendPod.Name + "-frontend-svc"
 			if deploymentPathExist, path, index := utils.IngressPathExists(ingress.Spec.Rules[0].HTTP.Paths, deploymentPath); deploymentPathExist {
-
 				if path.Backend.Service.Name != deploymentSvc {
 					ingress.Spec.Rules[0].HTTP.Paths[index].Backend.Service.Name = deploymentSvc
+					ingress.Spec.Rules[0].HTTP.Paths[index].Backend.Service.Port = networkingv1.ServiceBackendPort{
+						Number: frontendPod.Spec.Port,
+					}
 					return *ingress, r.Update(ctx, ingress)
 				}
 				return *ingress, fmt.Errorf(utils.FOUND)
