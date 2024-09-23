@@ -9,4 +9,5 @@ metadata:
 spec:
   imageName: nginx
   port: 80
+  isHost: true
   # TODO(user): Add fields here
