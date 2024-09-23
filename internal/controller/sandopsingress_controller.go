@@ -93,18 +93,88 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		l.Info(fmt.Sprintf("successfully created namespace for ingress controller: %s/%s", ingressNamespaceResource.Name, ingressNamespaceResource.Namespace))
 	}
 
-	serviceAccountIngress, err := r.reconcileServiceAccountIngress(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, fmt.Sprintf("failed to create ingress service account: %s/%s", serviceAccountIngress.Name, serviceAccountIngress.Namespace))
-			return ctrl.Result{}, nil
-		}
-	}
-
 	serviceAccountAdmission, err := r.reconcileServiceAccountAdmission(ctx, ingressResource, l)
 	if err != nil {
 		if err.Error() != utils.FOUND {
 			l.Error(err, fmt.Sprintf("failed to create ingress admission service account: %s/%s", serviceAccountAdmission.Name, serviceAccountAdmission.Namespace))
+			return ctrl.Result{}, nil
+		}
+	}
+
+	ingressAdmissionRole, err := r.reconcileIngressAdmissionRole(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create ingress admission role")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created ingress admission role: %s/%s", ingressAdmissionRole.Name, ingressAdmissionRole.Namespace))
+	}
+
+	ingressAdmissionRoleBinding, err := r.reconcileIngressAdmissionRoleBinding(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create ingress role binding")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created ingress role binding: %s/%s", ingressAdmissionRoleBinding.Name, ingressAdmissionRoleBinding.Namespace))
+	}
+
+	admissionClusterRole, err := r.reconcileAdmissionClusterRole(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create admission cluster role")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created admission cluster role: %s/%s", admissionClusterRole.Name, admissionClusterRole.Namespace))
+	}
+
+	ingressAdmissionClusterRoleBinding, err := r.reconcileIngressAdmissionClusterRoleBinding(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create ingress admission cluster role binding")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created ingress admission cluster role binding: %s/%s", ingressAdmissionClusterRoleBinding.Name, ingressAdmissionClusterRoleBinding.Namespace))
+	}
+
+	ingressWebhook, err := r.reconcileIngressWebhook(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create ingress webhook")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created ingress webhook: %s/%s", ingressWebhook.Name, ingressWebhook.Namespace))
+	}
+
+	jobAdmissionCreate, err := r.reconcileJobAdmissionCreate(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create ingress job admission")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created ingress job admission: %s/%s", jobAdmissionCreate.Name, jobAdmissionCreate.Namespace))
+	}
+
+	jobAdmissionPatchCreate, err := r.reconcileJobPatchAdmissionCreate(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, "failed to create ingress job admission")
+			return ctrl.Result{}, nil
+		}
+	} else {
+		l.Info(fmt.Sprintf("successfully created ingress job admission: %s/%s", jobAdmissionPatchCreate.Name, jobAdmissionPatchCreate.Namespace))
+	}
+
+	serviceAccountIngress, err := r.reconcileServiceAccountIngress(ctx, ingressResource, l)
+	if err != nil {
+		if err.Error() != utils.FOUND {
+			l.Error(err, fmt.Sprintf("failed to create ingress service account: %s/%s", serviceAccountIngress.Name, serviceAccountIngress.Namespace))
 			return ctrl.Result{}, nil
 		}
 	}
@@ -119,14 +189,14 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		l.Info(fmt.Sprintf("successfully created ingress role: %s/%s", ingressRole.Name, ingressRole.Namespace))
 	}
 
-	ingressAdmissionRole, err := r.reconcileIngressAdmissionRole(ctx, ingressResource, l)
+	ingressRoleBinding, err := r.reconcileIngressRoleBinding(ctx, ingressResource, l)
 	if err != nil {
 		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress admission role")
+			l.Error(err, "failed to create ingress role binding")
 			return ctrl.Result{}, nil
 		}
 	} else {
-		l.Info(fmt.Sprintf("successfully created ingress admission role: %s/%s", ingressAdmissionRole.Name, ingressAdmissionRole.Namespace))
+		l.Info(fmt.Sprintf("successfully created ingress role binding: %s/%s", ingressRoleBinding.Name, ingressRoleBinding.Namespace))
 	}
 
 	ingressClusterRole, err := r.reconcileClusterRole(ctx, ingressResource, l)
@@ -139,36 +209,6 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		l.Info(fmt.Sprintf("successfully created ingress cluster role: %s/%s", ingressClusterRole.Name, ingressClusterRole.Namespace))
 	}
 
-	admissionClusterRole, err := r.reconcileAdmissionClusterRole(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create admission cluster role")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created admission cluster role: %s/%s", admissionClusterRole.Name, admissionClusterRole.Namespace))
-	}
-
-	ingressRoleBinding, err := r.reconcileIngressRoleBinding(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress role binding")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created ingress role binding: %s/%s", ingressRoleBinding.Name, ingressRoleBinding.Namespace))
-	}
-
-	ingressAdmissionRoleBinding, err := r.reconcileIngressAdmissionRoleBinding(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress role binding")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created ingress role binding: %s/%s", ingressAdmissionRoleBinding.Name, ingressAdmissionRoleBinding.Namespace))
-	}
-
 	ingressClusterRoleBinding, err := r.reconcileIngressClusterRoleBinding(ctx, ingressResource, l)
 	if err != nil {
 		if err.Error() != utils.FOUND {
@@ -177,16 +217,6 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		}
 	} else {
 		l.Info(fmt.Sprintf("successfully created ingress cluster role binding: %s/%s", ingressClusterRoleBinding.Name, ingressClusterRoleBinding.Namespace))
-	}
-
-	ingressAdmissionClusterRoleBinding, err := r.reconcileIngressAdmissionClusterRoleBinding(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress admission cluster role binding")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created ingress admission cluster role binding: %s/%s", ingressAdmissionClusterRoleBinding.Name, ingressAdmissionClusterRoleBinding.Namespace))
 	}
 
 	ingressConfigMap, err := r.reconcileConfigMap(ctx, ingressResource, l)
@@ -219,36 +249,6 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		l.Info(fmt.Sprintf("successfully created ingress admission service: %s/%s", ingressAdmissionService.Name, ingressAdmissionService.Namespace))
 	}
 
-	ingressDeployment, err := r.reconcileIngressControllerDeployment(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress deployment")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created ingress deployment: %s/%s", ingressDeployment.Name, ingressDeployment.Namespace))
-	}
-
-	jobAdmissionCreate, err := r.reconcileJobAdmissionCreate(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress job admission")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created ingress job admission: %s/%s", jobAdmissionCreate.Name, jobAdmissionCreate.Namespace))
-	}
-
-	jobAdmissionPatchCreate, err := r.reconcileJobPatchAdmissionCreate(ctx, ingressResource, l)
-	if err != nil {
-		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress job admission")
-			return ctrl.Result{}, nil
-		}
-	} else {
-		l.Info(fmt.Sprintf("successfully created ingress job admission: %s/%s", jobAdmissionPatchCreate.Name, jobAdmissionPatchCreate.Namespace))
-	}
-
 	ingressClass, err := r.reconcileIngressClass(ctx, ingressResource, l)
 	if err != nil {
 		if err.Error() != utils.FOUND {
@@ -259,14 +259,14 @@ func (r *SandOpsIngressReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		l.Info(fmt.Sprintf("successfully created ingress class: %s/%s", ingressClass.Name, ingressClass.Namespace))
 	}
 
-	ingressWebhook, err := r.reconcileIngressWebhook(ctx, ingressResource, l)
+	ingressDeployment, err := r.reconcileIngressControllerDeployment(ctx, ingressResource, l)
 	if err != nil {
 		if err.Error() != utils.FOUND {
-			l.Error(err, "failed to create ingress webhook")
+			l.Error(err, "failed to create ingress deployment")
 			return ctrl.Result{}, nil
 		}
 	} else {
-		l.Info(fmt.Sprintf("successfully created ingress webhook: %s/%s", ingressWebhook.Name, ingressWebhook.Namespace))
+		l.Info(fmt.Sprintf("successfully created ingress deployment: %s/%s", ingressDeployment.Name, ingressDeployment.Namespace))
 	}
 
 	return ctrl.Result{}, nil

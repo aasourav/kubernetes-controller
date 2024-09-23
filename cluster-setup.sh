@@ -5,4 +5,4 @@ kubectl wait --namespace metallb-system \
                     --selector=app=metallb \
                     --timeout=390s
 kubectl create -f ./kind-metallb-manifests/metallb.yaml
-make install-ingress-controller
+# make install-ingress-controller
