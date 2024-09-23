@@ -854,7 +854,7 @@ func (r *SandOpsIngressReconciler) reconcileJobPatchAdmissionCreate(ctx context.
 							Image: "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.3@sha256:a320a50cc91bd15fd2d6fa6de58bd98c1bd64b9a6f926ce23a600d87043455a3",
 							Args: []string{
 								"patch",
-								"--webhook-name=ingress-nginx-admission",
+								"--webhook-name=ingress-nginx-admission-" + utils.NSSuffixedNamespace(ingressDeployment.Name),
 								"--namespace=$(POD_NAMESPACE)",
 								"--patch-mutating=false",
 								"--secret-name=ingress-nginx-admission",
@@ -871,7 +871,7 @@ func (r *SandOpsIngressReconciler) reconcileJobPatchAdmissionCreate(ctx context.
 								},
 							},
 							SecurityContext: &corev1.SecurityContext{
-								AllowPrivilegeEscalation: func(b bool) *bool { return &b }(false),
+								AllowPrivilegeEscalation: utils.DataTypePointerRef(false),
 								Capabilities: &corev1.Capabilities{
 									Drop: []corev1.Capability{"ALL"},
 								},
@@ -1053,7 +1053,7 @@ func (r *SandOpsIngressReconciler) reconcileIngressControllerDeployment(ctx cont
 					Containers: []corev1.Container{
 						{
 							Name:  utils.CONTROLLER,
-							Image: "registry.k8s.io/ingress-nginx/controller:v1.8.1@sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd",
+							Image: "registry.k8s.io/ingress-nginx/controller:v1.11.2@sha256:d5f8217feeac4887cb1ed21f27c2674e58be06bd8f5184cacea2a69abaf78dce",
 							Args: []string{
 								"/nginx-ingress-controller",
 								"--election-id=ingress-nginx-leader",

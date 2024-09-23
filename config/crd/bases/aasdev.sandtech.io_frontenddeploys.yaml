@@ -52,6 +52,8 @@ spec:
                 description: Foo is an example field of FrontendDeploy. Edit frontenddeploy_types.go
                   to remove/update
                 type: string
+              isHost:
+                type: boolean
               nodeName:
                 type: string
               port:

@@ -120,7 +120,9 @@ func (r *SandOpsIngressReconciler) deleteIngressClass(ctx context.Context, ingre
 
 	ingressClass := &networkingv1.IngressClass{}
 	err := r.Get(ctx, types.NamespacedName{Name: "nginx-" + utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressClass)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, ingressClass)
 	if err != nil {
 		return err
@@ -133,7 +135,9 @@ func (r *SandOpsIngressReconciler) deletePatchJob(ctx context.Context, ingressDe
 
 	job := &batchv1.Job{}
 	err := r.Get(ctx, types.NamespacedName{Name: "ingress-nginx-admission-patch", Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, job)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, job)
 	if err != nil {
 		return err
@@ -146,7 +150,9 @@ func (r *SandOpsIngressReconciler) deleteIngressJob(ctx context.Context, ingress
 
 	job := &batchv1.Job{}
 	err := r.Get(ctx, types.NamespacedName{Name: "ingress-nginx-admission-create", Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, job)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, job)
 	if err != nil {
 		return err
@@ -159,7 +165,9 @@ func (r *SandOpsIngressReconciler) deleteDeployment(ctx context.Context, ingress
 
 	deployment := &appsv1.Deployment{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_CONTROLLER, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, deployment)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, deployment)
 	if err != nil {
 		return err
@@ -172,7 +180,9 @@ func (r *SandOpsIngressReconciler) deleteServiceAdmission(ctx context.Context, i
 
 	service := &corev1.Service{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_CONTROLLER_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, service)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, service)
 	if err != nil {
 		return err
@@ -185,7 +195,9 @@ func (r *SandOpsIngressReconciler) deleteService(ctx context.Context, ingressDep
 
 	service := &corev1.Service{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_CONTROLLER, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, service)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, service)
 	if err != nil {
 		return err
@@ -198,7 +210,9 @@ func (r *SandOpsIngressReconciler) deleteConfigMap(ctx context.Context, ingressD
 
 	configMap := &corev1.ConfigMap{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_CONTROLLER, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, configMap)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, configMap)
 	if err != nil {
 		return err
@@ -211,7 +225,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionClusterRoleBinding(ctx context
 
 	clusterRoleBinding := &rbacv1.ClusterRoleBinding{}
 	err := r.Get(ctx, types.NamespacedName{Name: "ingress-nginx-admission-" + utils.NSSuffixedNamespace(ingressDeployment.Name), Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRoleBinding)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, clusterRoleBinding)
 	if err != nil {
 		return err
@@ -224,7 +240,9 @@ func (r *SandOpsIngressReconciler) deleteClusterRoleBinding(ctx context.Context,
 
 	clusterRoleBinding := &rbacv1.ClusterRoleBinding{}
 	err := r.Get(ctx, types.NamespacedName{Name: "ingress-nginx-" + utils.NSSuffixedNamespace(ingressDeployment.Name), Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRoleBinding)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, clusterRoleBinding)
 	if err != nil {
 		return err
@@ -237,7 +255,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionRoleBinding(ctx context.Contex
 
 	roleBinding := &rbacv1.RoleBinding{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, roleBinding)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, roleBinding)
 	if err != nil {
 		return err
@@ -250,7 +270,9 @@ func (r *SandOpsIngressReconciler) deleteRoleBinding(ctx context.Context, ingres
 
 	roleBinding := &rbacv1.RoleBinding{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, roleBinding)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, roleBinding)
 	if err != nil {
 		return err
@@ -263,7 +285,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionClusterRole(ctx context.Contex
 
 	admissionClusterRole := &rbacv1.ClusterRole{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, admissionClusterRole)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, admissionClusterRole)
 	if err != nil {
 		return err
@@ -276,7 +300,9 @@ func (r *SandOpsIngressReconciler) deleteClusterRole(ctx context.Context, ingres
 
 	clusterRole := &rbacv1.ClusterRole{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, clusterRole)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, clusterRole)
 	if err != nil {
 		return err
@@ -289,7 +315,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionRole(ctx context.Context, ingr
 
 	ingressAdmissionRole := &rbacv1.Role{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressAdmissionRole)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, ingressAdmissionRole)
 	if err != nil {
 		return err
@@ -302,7 +330,9 @@ func (r *SandOpsIngressReconciler) deleteRole(ctx context.Context, ingressDeploy
 
 	ingressRole := &rbacv1.Role{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, ingressRole)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, ingressRole)
 	if err != nil {
 		return err
@@ -315,7 +345,9 @@ func (r *SandOpsIngressReconciler) deleteAdmissionServiceAccount(ctx context.Con
 
 	serviceAccount := &corev1.ServiceAccount{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX_ADMISSION, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, serviceAccount)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, serviceAccount)
 	if err != nil {
 		return err
@@ -328,7 +360,9 @@ func (r *SandOpsIngressReconciler) deleteServiceAccount(ctx context.Context, ing
 
 	serviceAccount := &corev1.ServiceAccount{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.INGRESS_NGINX, Namespace: utils.NSSuffixedNamespace(ingressDeployment.Name)}, serviceAccount)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, serviceAccount)
 	if err != nil {
 		return err
@@ -341,7 +375,9 @@ func (r *SandOpsIngressReconciler) deleteNamespace(ctx context.Context, ingressD
 
 	namespace := &corev1.Namespace{}
 	err := r.Get(ctx, types.NamespacedName{Name: utils.NSSuffixedNamespace(ingressDeployment.Name), Namespace: ingressDeployment.Namespace}, namespace)
-
+	if errors.IsNotFound(err) {
+		return nil
+	}
 	err = r.Delete(ctx, namespace)
 	if err != nil {
 		return err

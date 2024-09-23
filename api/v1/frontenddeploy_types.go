@@ -38,6 +38,7 @@ type FrontendDeploySpec struct {
 	Port                  int32                 `json:"port"`
 	Replicas              int32                 `json:"replicas,omitempty"`
 	NodeName              string                `json:"nodeName,omitempty"`
+	IsHost                bool                  `json:"isHost,omitempty"`
 	EnvironmentVarialbles []EnvironmentVariable `json:"environmentVariables,omitempty"`
 }
 
